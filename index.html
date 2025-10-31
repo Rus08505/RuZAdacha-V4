@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#121417">
+    <title>RuZAdacha — </title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" data-role="sidebar">
+        <div class="brand">
+          <img src="assets/logo.png" class="brand-logo" alt="R">
+          <div class="brand-title">RuZAdacha</div>
+        </div>
+        <nav class="menu">
+          <button class="menu-item" data-route="today">Сегодня</button>
+          <button class="menu-item" data-route="ideas">Идеи</button>
+          <button class="menu-item" data-route="tasks">Задачи</button>
+          <button class="menu-item" data-route="finance">Деньги</button>
+          <button class="menu-item" data-route="habits">Привычки</button>
+          <button class="menu-item" data-route="analytics">Аналитика</button>
+        </nav>
+      </aside>
+      <div class="scrim" data-role="scrim"></div>
+
+      <main class="content">
+        <header class="topbar">
+          <div class="logo-pack big">
+            <img src="assets/logo.png" class="r-logo" alt="R">
+            <div class="app-name">RuZAdacha</div>
+          </div>
+          <button id="installBtn" class="btn" hidden>Установить</button>
+        </header>
+
+        <section id="screen-today" class="screen active">
+          <h1>Сегодня</h1>
+          <div class="cards-grid">
+            <a class="card card-link" data-route="tasks"><div class="card-title">Задачи</div><div class="card-sub">Ближайшие дела</div></a>
+            <a class="card card-link" data-route="ideas"><div class="card-title">Идеи</div><div class="card-sub">Парковка мыслей → задачи</div></a>
+            <a class="card card-link" data-route="habits"><div class="card-title">Привычки</div><div class="card-sub">Серия за неделю</div></a>
+            <a class="card card-link" data-route="finance"><div class="card-title">Деньги</div><div class="card-sub">Операции за сегодня</div></a>
+            <a class="card card-link" data-route="analytics"><div class="card-title">Аналитика</div><div class="card-sub">Дашборд прогресса</div></a>
+          </div>
+        </section>
+
+
+        <section id="screen-ideas" class="screen">
+          <h1>Идеи</h1>
+          <div class="row">
+            <input id="ideaInput" class="input" placeholder="Записать идею">
+            <button id="addIdea" class="btn">Добавить</button>
+          </div>
+          <ul id="ideasList" class="list"></ul>
+        </section>
+    
+        <section id="screen-tasks" class="screen">
+          <h1>Задачи</h1>
+          <div class="row">
+            <input id="taskInput" class="input" placeholder="Быстро добавить задачу и Enter">
+            <input id="taskDueInput" type="date" class="input small" title="Дедлайн">
+          </div>
+          <div class="filters">
+            <button class="chip is-active" data-filter="all">Все</button>
+            <button class="chip" data-filter="today">Сегодня</button>
+            <button class="chip" data-filter="open">Открытые</button>
+            <button class="chip" data-filter="overdue">Просроченные</button>
+          </div>
+          <ul id="taskList" class="list tasks"></ul>
+          <button class="fab" id="fabAddTask">+</button>
+        </section>
+
+        <section id="screen-finance" class="screen">
+          <h1>Деньги</h1>
+          <div class="balance">Баланс: <span id="balanceValue">0 ₽</span></div>
+          <div class="row">
+            <input id="amountInput" type="number" class="input" placeholder="Сумма">
+            <select id="typeInput" class="input"><option value="expense">Расход</option><option value="income">Доход</option></select>
+            <input id="catInput" class="input" placeholder="Категория">
+            <button id="addTxn" class="btn">Добавить</button>
+          </div>
+          <ul id="txnList" class="list"></ul>
+        </section>
+
+        <section id="screen-habits" class="screen">
+          <h1>Привычки</h1>
+          <div class="form-stack" id="habitForm">
+            <input id="habitInput" class="input" placeholder="Название привычки">
+            <label class="label" for="habitDueInput">Дата цели (необязательно)</label>
+            <input id="habitDueInput" type="date" class="input" placeholder="Выбрать дату">
+            <div class="row row-actions"><button id="addHabit" class="btn btn-full">Добавить</button></div>
+          </div>
+          <ul id="habitList" class="list habits"></ul>
+        </section>
+
+        <section id="screen-analytics" class="screen">
+          <h1>Аналитика</h1>
+          <div class="cards-grid analytics">
+            <div class="card"><div class="card-title">Задачи: неделя</div><div id="tasksStats" class="stat"></div></div>
+            <div class="card"><div class="card-title">Привычки: % сегодня</div><div id="habitsStats" class="stat"></div></div>
+            <div class="card"><div class="card-title">Финансы: баланс</div><div id="financeStats" class="stat"></div></div>
+          </div>
+        </section>
+      </main>
+
+      <div class="swipe-zone" data-role="swipezone"></div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=31'); }</script>
+  
+    <div id="notesModal" class="modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Заметки по задаче</div>
+          <button id="closeNotes" class="btn ghost">Закрыть</button>
+        </div>
+        <div id="notesList" class="list"></div>
+        <div class="row">
+          <input id="noteInput" class="input" placeholder="Новая заметка и Enter">
+          <button id="addNote" class="btn">Добавить</button>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>
